@@ -6,6 +6,7 @@ import pandas as pd
 from src.data_loader import load_data
 from src.elo import compute_elo
 from src.features import concat_df, compute_features
+from src.model import train_model
 
 def main():
     print("Loading data...")
@@ -36,12 +37,16 @@ def main():
     print(features_df.tail())
     print(features_df.isnull().sum())
 
-    all_teams = pd.concat([df["home_team"], df["away_team"]]).unique()
-    for team in all_teams:
-        print(team)
+    # all_teams = pd.concat([df["home_team"], df["away_team"]]).unique()
+    # for team in all_teams:
+    #     print(team)
 
     # null_teams = features_df[features_df["win_rate_10"].isnull()]["team"].unique()
     # print(null_teams)
+
+    model, scaler = train_model(features_df)
+    print(model.coef_)
+    print(model.intercept_)
 
 if __name__ == "__main__":
     main()

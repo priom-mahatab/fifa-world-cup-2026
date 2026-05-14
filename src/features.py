@@ -3,14 +3,14 @@ import numpy as np
 
 def concat_df(df):
 
-    home_stats = df[["date", "home_team", "home_score", "away_score"]].copy()
+    home_stats = df[["date", "home_team", "home_score", "away_score", "sample_weight"]].copy()
     home_stats = home_stats.rename(columns={
         "home_team": "team",
         "home_score": "goals_scored",
         "away_score": "goals_conceded"
     })
 
-    away_stats = df[["date", "away_team", "away_score", "home_score"]].copy()
+    away_stats = df[["date", "away_team", "away_score", "home_score", "sample_weight"]].copy()
     away_stats = away_stats.rename(columns={
         "away_team": "team",
         "away_score": "goals_scored",

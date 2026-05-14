@@ -4,6 +4,14 @@ WIN = 1.0
 TIE = 0.5
 K = 20
 
+FEATURE_COLS = [
+    "elo_before",
+    "win_rate_10", "win_rate_20",
+    "avg_goals_scored_10", "avg_goals_scored_20",
+    "avg_goals_conceded_10", "avg_goals_conceded_20",
+    "clean_sheet_rate_10", "clean_sheet_rate_20"
+]
+
 TOURNAMENT_WEIGHTS = {
     "FIFA World Cup": 1.0,
     "Copa América": 0.8,
