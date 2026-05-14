@@ -15,9 +15,9 @@ def train_model(features_df):
     sample_weight = train_df["sample_weight"]
     model = PoissonRegressor(alpha=0.1, max_iter=1000)
     model.fit(X_scaled, y, sample_weight=sample_weight)
-    print(train_df.shape)
-    print(train_df[FEATURE_COLS].isnull().sum())
-    print(y.describe())
-    print(model)
+    # print(train_df.shape)
+    # print(train_df[FEATURE_COLS].isnull().sum())
+    # print(y.describe())
+    # print(model)
 
     return model, scaler
