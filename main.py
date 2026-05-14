@@ -8,6 +8,7 @@ from elo import compute_elo
 from features import concat_df, compute_features
 from model import train_model
 from simulator import simulate_match
+from config import GROUPS, WORLD_CUP_TEAMS
 
 def main():
     # print("Loading data...")
@@ -38,7 +39,7 @@ def main():
     # print(features_df.tail())
     # print(features_df.isnull().sum())
 
-    # all_teams = pd.concat([df["home_team"], df["away_team"]]).unique()
+    all_teams = pd.concat([df["home_team"], df["away_team"]]).unique()
     # for team in all_teams:
     #     print(team)
 
@@ -49,9 +50,15 @@ def main():
     # print(model.coef_)
     # print(model.intercept_)
 
-    print(simulate_match("Argentina", "France", model, scaler, features_df))
-    print(simulate_match("England", "Brazil", model, scaler, features_df))
-    print(simulate_match("Morocco", "Spain", model, scaler, features_df))
+    # print(simulate_match("Argentina", "France", model, scaler, features_df))
+    # print(simulate_match("England", "Brazil", model, scaler, features_df))
+    # print(simulate_match("Morocco", "Spain", model, scaler, features_df))
+
+    all_group_teams = [team for group in GROUPS.values() for team in group]
+    # for team in all_group_teams:
+    #     if team in features_df["team"].values:
+    #         print(f"{team}")
+
 
 if __name__ == "__main__":
     main()

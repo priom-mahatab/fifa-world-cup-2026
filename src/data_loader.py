@@ -34,8 +34,8 @@ def load_data():
     df["recency_weight"] = df["date"].apply(get_recency_weight)
     df["sample_weight"] = df["tournament_weight"] * df["recency_weight"]
 
-    df = df[df["recency_weight"] > 0]
-    df = df.dropna(subset=["home_score", "away_score"]).copy()
+    df = df[df["recency_weight"] > 0] # only matches with relevant recency
+    df = df.dropna(subset=["home_score", "away_score"]).copy() # drop unplayed matches
 
     df = df.sort_values("date").reset_index(drop=True)
 
