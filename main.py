@@ -1,6 +1,7 @@
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+import pandas as pd
 
 from src.data_loader import load_data
 from src.elo import compute_elo
@@ -34,6 +35,10 @@ def main():
     print(features_df.head())
     print(features_df.tail())
     print(features_df.isnull().sum())
+
+    all_teams = pd.concat([df["home_team"], df["away_team"]]).unique()
+    for team in all_teams:
+        print(team)
 
     # null_teams = features_df[features_df["win_rate_10"].isnull()]["team"].unique()
     # print(null_teams)

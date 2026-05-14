@@ -27,3 +27,36 @@ TOURNAMENT_WEIGHTS = {
 }
 
 DEFAULT_TOURNAMENT_WEIGHT = 0.25
+
+TEAM_NAME_MAP = {
+    "IR Iran": "Iran",
+    "Korea Republic": "South Korea",
+    "Côte d'Ivoire": "Ivory Coast",
+    "Türkiye": "Turkey",
+    "Congo DR": "DR Congo",
+    "Cabo Verde": "Cape Verde",
+    "Czechia": "Czech Republic",
+    "Bosnia and Herzegovina": "Bosnia-Herzegovina",
+    "Curaçao": "Curaçao",
+}
+
+WORLD_CUP_TEAMS = [
+    # Co-hosts
+    "Canada", "Mexico", "USA",
+    # AFC
+    "Australia", "Iraq", "Iran", "Japan", "Jordan",
+    "South Korea", "Qatar", "Saudi Arabia", "Uzbekistan",
+    # CAF
+    "Algeria", "Cape Verde", "DR Congo", "Ivory Coast", "Egypt",
+    "Ghana", "Morocco", "Senegal", "South Africa", "Tunisia",
+    # CONCACAF
+    "Curaçao", "Haiti", "Panama",
+    # CONMEBOL
+    "Argentina", "Brazil", "Colombia", "Ecuador", "Paraguay", "Uruguay",
+    # OFC
+    "New Zealand",
+    # UEFA
+    "Austria", "Belgium", "Bosnia-Herzegovina", "Croatia", "Czech Republic",
+    "England", "France", "Germany", "Netherlands", "Norway", "Portugal",
+    "Scotland", "Spain", "Sweden", "Switzerland", "Turkey",
+]
