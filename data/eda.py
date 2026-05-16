@@ -1,7 +1,19 @@
+"""Exploratory-data-analysis (EDA) scratchpad.
+
+A standalone script (predates the modular pipeline) that loads the Kaggle
+international results dataset, computes tournament + recency weights,
+walks the data to build per-team Elo ratings, and prints summary stats
+along the way. The production code paths in `src/` supersede this file;
+it is kept for reference / one-off exploration.
+"""
+
+# IGNORE THIS FILE
+
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
 import pandas as pd
 
+# Elo constants — duplicated locally so this script remains standalone.
 BASE_ELO = 1500
 LOSS = 0.0
 WIN = 1.0
@@ -54,6 +66,17 @@ df["tournament_weight"] = df["tournament"].map({
 # print(df[df["tournament_weight"].isnull()]["tournament"].value_counts().head(20))
 
 def get_recency_weight(date):
+    """Step-function recency weight keyed off World Cup start dates.
+
+    Matches in the most recent cycle are weighted 1.0; weight decays by
+    cycle and drops to 0 before the 2010 World Cup.
+
+    Args:
+        date: pandas Timestamp of the match.
+
+    Returns:
+        Float weight in {1.0, 0.7, 0.4, 0.2, 0.0}.
+    """
     if date >= pd.Timestamp('2022-11-20'):  # 2022 World Cup start date
         return 1.0
     elif date >= pd.Timestamp('2018-06-14'):  # 2018 World Cup start date
@@ -84,23 +107,56 @@ elo_ratings = {}
 elo_records = []
 
 def get_goal_diff_multiplier(goal_diff):
+    """K-factor multiplier scaling Elo updates by the margin of victory.
+
+    Args:
+        goal_diff: Absolute goal difference of the match.
+
+    Returns:
+        1.0 for a 1-goal margin, 1.5 for 2, 1.75 for 3, and 2.0 otherwise.
+    """
     if goal_diff == 1:
         return 1.0
-    
+
     if goal_diff == 2:
         return 1.5
-    
+
     if goal_diff == 3:
         return 1.75
-    
+
     else:
         return 2.0
-    
+
 def get_expected_result(team_elo, opponent_elo):
+    """Standard Elo expected-score formula (logistic on rating difference).
+
+    Args:
+        team_elo: Pre-match rating of the team.
+        opponent_elo: Pre-match rating of the opponent.
+
+    Returns:
+        Expected score in [0, 1].
+    """
     expected_result = 1 / (1 + 10 ** ((opponent_elo - team_elo) / 400))
     return expected_result
 
 def update_elo(team_elo, opponent_elo, actual_result, tournament_weight, goal_diff):
+    """Compute the post-match Elo rating for a single team.
+
+    Combines the base K-factor with the goal-difference multiplier and
+    tournament importance weight, then applies the `(actual - expected)`
+    update.
+
+    Args:
+        team_elo: Pre-match rating of the team being updated.
+        opponent_elo: Pre-match rating of the opponent.
+        actual_result: 1.0 (win), 0.5 (draw), or 0.0 (loss).
+        tournament_weight: Importance weight of the match.
+        goal_diff: Absolute goal difference.
+
+    Returns:
+        The team's new Elo rating.
+    """
     goal_diff_multiplier = get_goal_diff_multiplier(goal_diff)
     expected_result = get_expected_result(team_elo, opponent_elo)
 
@@ -108,6 +164,8 @@ def update_elo(team_elo, opponent_elo, actual_result, tournament_weight, goal_di
     return new_elo
 
 
+# Chronological walk over every match: update both teams' ratings in
+# place and append a row per side to the long-format history.
 df = df.sort_values("date").reset_index(drop=True)
 
 for _, row in df.iterrows():
