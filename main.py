@@ -7,7 +7,7 @@ from data_loader import load_data
 from elo import compute_elo
 from features import concat_df, compute_features
 from model import train_model
-from simulator import simulate_match
+from simulator import simulate_match, simulate_group
 from config import GROUPS, WORLD_CUP_TEAMS
 
 def main():
@@ -58,6 +58,11 @@ def main():
     # for team in all_group_teams:
     #     if team in features_df["team"].values:
     #         print(f"{team}")
+
+    for group_name, teams in GROUPS.items():
+        standings = simulate_group(group_name, teams, model, scaler, features_df)
+        print(f"\nGroup {group_name}")
+        print(standings[["team", "played", "wins", "draws", "losses", "goals_for", "goals_against", "goal_difference", "points"]])
 
 
 if __name__ == "__main__":
